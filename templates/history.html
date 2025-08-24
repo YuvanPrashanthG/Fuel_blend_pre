@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>History - Fuel Blend Prediction</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .container { background: #f9f9f9; padding: 30px; border-radius: 10px; }
+        h1 { color: #2c3e50; text-align: center; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; background: white; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background: #3498db; color: white; }
+        tr:hover { background: #f5f5f5; }
+        .status-completed { color: #27ae60; }
+        .status-processing { color: #f39c12; }
+        .status-error { color: #e74c3c; }
+        .btn { background: #3498db; color: white; padding: 5px 10px; text-decoration: none; border-radius: 3px; font-size: 12px; }
+        .btn:hover { background: #2980b9; }
+        .nav-links { text-align: center; margin-top: 20px; }
+        .nav-links a { color: #3498db; text-decoration: none; margin: 0 15px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📋 Upload History</h1>
+        
+        {% if files %}
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Filename</th>
+                    <th>Upload Time</th>
+                    <th>Status</th>
+                    <th>Prediction Time</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for file in files %}
+                <tr>
+                    <td>{{ file.id }}</td>
+                    <td>{{ file.filename }}</td>
+                    <td>{{ file.upload_time }}</td>
+                    <td class="status-{{ file.status }}">{{ file.status }}</td>
+                    <td>{{ file.prediction_time if file.prediction_time else 'N/A' }}</td>
+                    <td>
+                        {% if file.prediction_time %}
+                            <a href="{{ url_for('results', file_id=file.id) }}" class="btn">View</a>
+                            <a href="{{ url_for('download_file', file_id=file.id) }}" class="btn">Download</a>
+                        {% else %}
+                            <span>No actions</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p style="text-align: center; color: #7f8c8d;">No files have been uploaded yet.</p>
+        {% endif %}
+
+        <div class="nav-links">
+            <a href="{{ url_for('index') }}">⬆️ Upload New File</a>
+        </div>
+    </div>
+</body>
+</html>

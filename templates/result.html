@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Processing Results</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .success { color: #28a745; }
+        .processing { color: #ffc107; }
+        .error { color: #dc3545; }
+        pre { 
+            background-color: #f8f9fa; 
+            padding: 15px; 
+            border-radius: 5px; 
+            overflow-x: auto;
+            border: 1px solid #e9ecef;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 20px 0;
+            background-color: #f9f9f9;
+        }
+        button { 
+            padding: 10px 20px; 
+            background-color: #007bff; 
+            color: white; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            margin: 10px 5px;
+        }
+        button:hover { background-color: #0056b3; }
+        a { 
+            color: #007bff; 
+            text-decoration: none; 
+            margin-right: 15px; 
+        }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <h1>📊 Processing Results</h1>
+    
+    {% if file_info %}
+    <div class="card">
+        <h2>📄 File Information</h2>
+        <p><strong>Filename:</strong> {{ file_info.filename }}</p>
+        <p><strong>Uploaded:</strong> {{ file_info.upload_time }}</p>
+        <p><strong>Status:</strong> 
+            <span class="{% if file_info.status == 'completed' %}success{% elif file_info.status == 'processing' %}processing{% else %}error{% endif %}">
+                {{ file_info.status }}
+            </span>
+        </p>
+    </div>
+    {% endif %}
+
+    {% if prediction %}
+    <div class="card">
+        <h2>✅ Prediction Results</h2>
+        <p><strong>Processed:</strong> {{ prediction.prediction_time }}</p>
+        
+        <h3>Sample Data (first 5 rows):</h3>
+        <pre>{{ prediction_sample }}</pre>
+        
+        <form action="/download/{{ file_id }}" method="get">
+            <button type="submit">📥 Download Full Results</button>
+        </form>
+    </div>
+    {% else %}
+    <div class="card">
+        <h2>⏳ Processing</h2>
+        <p>No prediction results available yet. Please wait while processing completes.</p>
+        <p>Refresh the page to check the status.</p>
+    </div>
+    {% endif %}
+
+    <div style="margin-top: 30px;">
+        <a href="/">⬆️ Upload Another File</a>
+        <a href="/history">📋 View History</a>
+        <a href="/download/{{ file_id }}">📥 Download Results</a>
+    </div>
+
+    <script>
+        // Auto-refresh if still processing
+        {% if file_info and file_info.status == 'processing' %}
+        setTimeout(function() {
+            window.location.reload();
+        }, 3000); // Refresh every 3 seconds
+        {% endif %}
+    </script>
+</body>
+</html>

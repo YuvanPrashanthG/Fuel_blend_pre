@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload File - Fuel Blend Prediction</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .container { background: #f9f9f9; padding: 30px; border-radius: 10px; }
+        h1 { color: #2c3e50; text-align: center; }
+        .flash { padding: 15px; margin: 15px 0; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .form-group { margin: 20px 0; }
+        input[type="file"] { padding: 10px; border: 2px dashed #3498db; border-radius: 5px; width: 100%; }
+        input[type="submit"] { background: #3498db; color: white; padding: 12px 24px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
+        input[type="submit"]:hover { background: #2980b9; }
+        .nav-links { text-align: center; margin-top: 20px; }
+        .nav-links a { color: #3498db; text-decoration: none; margin: 0 15px; }
+        .nav-links a:hover { text-decoration: underline; }
+        .debug-links { margin-top: 30px; padding: 15px; background: #e8f4f8; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Fuel Blend Prediction</h1>
+        
+        <!-- Flash messages -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="flash {% if 'success' in message|lower %}success{% else %}error{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <input type="file" name="file" accept=".csv" required>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Upload and Predict">
+            </div>
+        </form>
+
+        <div class="nav-links">
+            <a href="{{ url_for('history') }}">📋 View History</a>
+        </div>
+
+        <div class="debug-links">
+            <h3>Debug Links:</h3>
+            <a href="{{ url_for('debug_model') }}">Model Info</a> |
+            <a href="{{ url_for('debug_test_prediction') }}">Test Prediction</a> |
+            <a href="{{ url_for('debug_database') }}">Database</a> |
+            <a href="{{ url_for('debug_clear_db') }}">Clear DB</a>
+        </div>
+    </div>
+</body>
+</html>

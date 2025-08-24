@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Results - Fuel Blend Prediction</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .container { background: #f9f9f9; padding: 30px; border-radius: 10px; }
+        h1 { color: #2c3e50; text-align: center; }
+        .file-info, .prediction-info { background: white; padding: 20px; border-radius: 5px; margin: 20px 0; border-left: 4px solid #3498db; }
+        pre { background: #2c3e50; color: white; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        .btn { background: #3498db; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; margin: 5px; }
+        .btn:hover { background: #2980b9; }
+        .nav-links { text-align: center; margin-top: 30px; }
+        .nav-links a { color: #3498db; text-decoration: none; margin: 0 15px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✅ Prediction Results</h1>
+        
+        {% if file_info %}
+        <div class="file-info">
+            <h2>📄 File Information</h2>
+            <p><strong>Filename:</strong> {{ file_info.filename }}</p>
+            <p><strong>Uploaded:</strong> {{ file_info.upload_time }}</p>
+            <p><strong>Status:</strong> {{ file_info.status }}</p>
+        </div>
+        {% endif %}
+
+        {% if prediction %}
+        <div class="prediction-info">
+            <h2>📊 Prediction Results</h2>
+            <p><strong>Processed:</strong> {{ prediction.prediction_time }}</p>
+            
+            <h3>Sample Data (first 5 rows):</h3>
+            <pre>{{ prediction_sample }}</pre>
+            
+            <a href="{{ url_for('download_file', file_id=file_id) }}" class="btn">📥 Download Full Results</a>
+        </div>
+        {% else %}
+        <div class="prediction-info">
+            <h2>⏳ Processing</h2>
+            <p>Your file is being processed. Please wait...</p>
+            <p>Refresh the page to check the status.</p>
+        </div>
+        {% endif %}
+
+        <div class="nav-links">
+            <a href="{{ url_for('index') }}">⬆️ Upload Another File</a>
+            <a href="{{ url_for('history') }}">📋 View History</a>
+        </div>
+    </div>
+</body>
+</html>
