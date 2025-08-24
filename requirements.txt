@@ -3,4 +3,6 @@ uvicorn
 pandas
 joblib
 scikit-learn
+lightgbm
 numpy
+python-multipart
